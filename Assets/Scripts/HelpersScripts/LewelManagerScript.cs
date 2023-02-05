@@ -11,9 +11,9 @@ public class LewelManagerScript : MonoBehaviour
     public GameObject enemyGroupBullet;
     public GameObject enemyGroupRam;
     Vector3 startEnemyGroupPosition = new Vector3(0, 3.15f, 0);
-
-    private FirstGroup currentGroup;
-    private TypeGroup[] typesGroup = {TypeGroup.Ram};
+    private RamGroup currentGroup2;
+    private FirstGroup currentGroup1;
+    private TypeGroup[] typesGroup = {TypeGroup.shutting, TypeGroup.Ram};
 
     private int groupCount = 0;
 
@@ -28,11 +28,19 @@ public class LewelManagerScript : MonoBehaviour
 
     void Update()
     {
-        if(currentGroup != null && currentGroup.isAlive == false) {
+        if(currentGroup1 != null && currentGroup1.isAlive == false) {
             if (groupCount == typesGroup.Length) {
                 SceneManager.LoadSceneAsync(SceneIDS.winSceneID);
             } else {
-                Destroy(currentGroup.gameObject);
+                Destroy(currentGroup1.gameObject);
+                CreateNewGroup();
+                groupCount++;
+            }
+        }else if(currentGroup2 != null && currentGroup2.isAlive == false) {
+            if (groupCount == typesGroup.Length) {
+                SceneManager.LoadSceneAsync(SceneIDS.winSceneID);
+            } else {
+                Destroy(currentGroup2.gameObject);
                 CreateNewGroup();
                 groupCount++;
             }
@@ -45,14 +53,17 @@ public class LewelManagerScript : MonoBehaviour
 
             GameObject newEnemyGroup = Instantiate(enemyGroupBullet);
             newEnemyGroup.transform.position = startEnemyGroupPosition;
-            currentGroup = newEnemyGroup.GetComponent<FirstGroup>();
+            currentGroup1 = newEnemyGroup.GetComponent<FirstGroup>();
+
+            print("spawn 1");
 
         }else if (typesGroup[groupCount] == TypeGroup.Ram){
 
             GameObject newEnemyGroup = Instantiate(enemyGroupRam);
             newEnemyGroup.transform.position = startEnemyGroupPosition;
-            currentGroup = newEnemyGroup.GetComponent<FirstGroup>();
+            currentGroup2 = newEnemyGroup.GetComponent<RamGroup>();
             
+            print("spawn 2");
         }
         
     }

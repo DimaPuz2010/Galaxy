@@ -5,6 +5,5 @@ using UnityEngine;
 public enum TypeGroup
 {
     shutting,
-
     Ram,
 }

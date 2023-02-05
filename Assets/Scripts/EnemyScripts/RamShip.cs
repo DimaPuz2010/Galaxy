@@ -7,11 +7,12 @@ public class RamShip : MonoBehaviour
     public Direction direction;
     public SpriteRenderer shiprendered;
     private float speed = 0.2f;
+    private float heal = 50;
     private float halfwidth;
     private float halfheight;
     void Start()
     {
-        halfheight = shiprendered.sprite.bounds.size.x / 2;
+        halfwidth = shiprendered.sprite.bounds.size.x / 2;
         halfheight = shiprendered.sprite.bounds.size.y / 2;
     }
 
@@ -48,9 +49,11 @@ public class RamShip : MonoBehaviour
             if(transform.position.y > 0)
             {
                 direction = Direction.down;
+                transform.rotation = Quaternion.Euler(0, 0, 180);
             }else
             {
                 direction = Direction.up;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
     }
@@ -68,9 +71,11 @@ public class RamShip : MonoBehaviour
             if(transform.position.y > 0)
             {
                 direction = Direction.down;
+                transform.rotation = Quaternion.Euler(0, 0, 180);
             }else
             {
                 direction = Direction.up;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
     }
@@ -78,7 +83,9 @@ public class RamShip : MonoBehaviour
     {
         Vector3 newPosition = transform.position;
         newPosition.y += speed;
-        if (Helpers.IsPositionOnScreen(newPosition) == true)
+        Vector3 checkposition = newPosition;
+        checkposition.y += halfheight;
+        if (Helpers.IsPositionOnScreen(checkposition) == true)
         {
             transform.position = newPosition;
         }else
@@ -86,9 +93,11 @@ public class RamShip : MonoBehaviour
             if(transform.position.x > 0)
             {
                 direction = Direction.left;
+                transform.rotation = Quaternion.Euler(0, 0, 90);
             }else
             {
                 direction = Direction.right;
+                transform.rotation = Quaternion.Euler(0, 0, 270);
             }
         }
     }
@@ -96,7 +105,9 @@ public class RamShip : MonoBehaviour
     {
         Vector3 newPosition = transform.position;
         newPosition.y -= speed;
-        if (Helpers.IsPositionOnScreen(newPosition) == true)
+        Vector3 checkposition = newPosition;
+        checkposition.y -= halfheight;
+        if (Helpers.IsPositionOnScreen(checkposition) == true)
         {
             transform.position = newPosition;
         }else
@@ -104,9 +115,25 @@ public class RamShip : MonoBehaviour
             if(transform.position.x > 0)
             {
                 direction = Direction.left;
+                transform.rotation = Quaternion.Euler(0, 0, 90);
             }else
             {
                 direction = Direction.right;
+                transform.rotation = Quaternion.Euler(0, 0, 270);
+            }
+        }
+    }
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        GameObject otherObject = collider.gameObject ;
+        PlayerBullet bulletObject = otherObject.GetComponent<PlayerBullet>();
+        if(bulletObject != null)
+        {
+            heal -= bulletObject.damage;
+            Destroy(otherObject);
+            if(heal <= 0)
+            {
+                Destroy(gameObject);
             }
         }
     }

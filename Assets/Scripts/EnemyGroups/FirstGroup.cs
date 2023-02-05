@@ -9,7 +9,7 @@ public class FirstGroup : MonoBehaviour
     public EnemyShip ship2;
     public EnemyShip ship3;
     private List<EnemyShip> ships = new List<EnemyShip>();
-    private float speed = 0.1f;
+    private float speed = 0.02f;
     private int derection = -1;
 
     private System.Random gener = new System.Random();
